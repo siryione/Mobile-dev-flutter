@@ -104,7 +104,7 @@ class _MoviePageState extends State<MoviePage> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
                                     image: DecorationImage(
-                                      image: movies[index].poster == '' ? AssetImage('assets/Posters/no_image.jpg') : AssetImage('assets/Posters/' + movies[index].poster)
+                                      image: movies[index].poster == 'N/A' ? AssetImage('assets/Posters/no_image.jpg') : NetworkImage(movies[index].poster)
                                     ),
                                   )
                                 ),
