@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/cubit/moviecubit_cubit.dart';
 import 'package:flutter_application/model/Movie.dart';
 import 'package:flutter_application/services/MovieService.dart';
+import 'package:flutter_application/view/MovieInfoPage.dart';
 import 'package:flutter_application/widget/Search.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -76,9 +77,11 @@ class _MoviePageState extends State<MoviePage> {
                       shrinkWrap: true,
                       itemCount: movies.length,
                       itemBuilder: (context, index) {
+
                         // return Container(
 
-                        return Dismissible(                          
+                        return Dismissible(   
+                                                 
                           // Each Dismissible must contain a Key. Keys allow Flutter to
                           // uniquely identify widgets.
                           key: Key(movies[index].title),
@@ -90,56 +93,69 @@ class _MoviePageState extends State<MoviePage> {
                               movies.removeAt(index);
                             });
                           },
-                          child: Container(
-                              margin: EdgeInsets.only(bottom: 19),
-                              height: 81,
-                              width: MediaQuery.of(context).size.width -50,
-                            child: Row(
-                              
-                              children: <Widget>[
 
-                                Container(
-                                  height: 81,
-                                  width: 62,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    image: DecorationImage(
-                                      image: movies[index].poster == 'N/A' ? AssetImage('assets/Posters/no_image.jpg') : NetworkImage(movies[index].poster)
-                                    ),
+                          child: ListTile(
+                            onTap: (){
+                              movies[index].imdbID == 'noid' ? print('no'):
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MovieInfoPage(movies[index].imdbID)),
+                              );
+                            },
+                            subtitle: Container(
+                                               
+                                margin: EdgeInsets.only(bottom: 19),
+                                height: 81,
+                                width: MediaQuery.of(context).size.width -50,
+                              child: Row(
+                                
+                                children: <Widget>[
+
+                                  Container(
+                                    height: 81,
+                                    width: 62,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      image: DecorationImage(
+                                        image: movies[index].poster == 'N/A' ? AssetImage('assets/Posters/no_image.jpg') : NetworkImage(movies[index].poster)
+                                      ),
+                                    )
+                                  ),
+                                  SizedBox(
+                                    width: 21,
+                                  ),
+                                  Expanded(child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(movies[index].title, 
+                                      overflow: TextOverflow.fade, 
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      style: GoogleFonts.openSans(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
+                                      ),),
+                                      SizedBox(height: 5,),
+                                      Text('${movies[index].type}', style: GoogleFonts.openSans(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black87,
+                                      ),),
+                                      SizedBox(height: 5,),
+                                      Text('${movies[index].year}', style: GoogleFonts.openSans(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black54,
+                                      ),),
+                                    ]
                                   )
-                                ),
-                                SizedBox(
-                                  width: 21,
-                                ),
-                                Expanded(child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(movies[index].title, 
-                                    overflow: TextOverflow.fade, 
-                                    maxLines: 1,
-                                    softWrap: false,
-                                    style: GoogleFonts.openSans(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black,
-                                    ),),
-                                    SizedBox(height: 5,),
-                                    Text('${movies[index].type}', style: GoogleFonts.openSans(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black87,
-                                    ),),
-                                    SizedBox(height: 5,),
-                                    Text('${movies[index].year}', style: GoogleFonts.openSans(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black54,
-                                    ),),
-                                  ]
-                                )
-                                )
-                              ],
+                                  )
+                                ],
+                              ),
                             ),
                           )
                         );
