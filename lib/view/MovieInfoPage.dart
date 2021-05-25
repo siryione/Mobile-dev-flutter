@@ -31,6 +31,7 @@ class MovieInfoPage extends StatelessWidget {
       ),
     );
   }
+
   Widget buildLoaded(Movie movie, BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(movie.title)),
@@ -39,11 +40,13 @@ class MovieInfoPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.network(
-                movie.poster == "" ? 'assets/Posters/no_image.jpg' : movie.poster,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+              movie.poster == "N/A"
+                  ? Image.asset('assets/Posters/no_image.jpg')
+                  : Image.network(
+                      movie.poster,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
               Text(
                 movie.title + " (" + movie.year + ")",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
@@ -54,13 +57,13 @@ class MovieInfoPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                                            Text("Released: " + movie.released),
-                        Text("Rated: " + movie.rated),
-                        Text("Runtime: " + movie.runtime),
-                        Text("Language: " + movie.language),
-                        Text("Country: " + movie.country),
-                        Text("Genre: " + movie.genre),
-                        Text("Director: " + movie.director),
+                    Text("Released: " + movie.released),
+                    Text("Rated: " + movie.rated),
+                    Text("Runtime: " + movie.runtime),
+                    Text("Language: " + movie.language),
+                    Text("Country: " + movie.country),
+                    Text("Genre: " + movie.genre),
+                    Text("Director: " + movie.director),
                     Text("Writer: " + movie.writer),
                     Text("Production: " + movie.production),
                     Text("Actors: " + movie.actors),
