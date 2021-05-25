@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application/services/MovieService.dart';
-import 'package:flutter_application/view/AddMoviePage.dart';
 import 'package:flutter_application/view/ChartPage.dart';
+import 'package:flutter_application/view/GalleryPage.dart';
 import 'package:flutter_application/view/HomePage.dart';
 import 'package:flutter_application/view/MoviePage.dart';
 
@@ -37,7 +36,7 @@ class _NavigationBarState extends State<NavigationBar> {
     MyHomePage(),
     ChartPage(),
     MoviePage(),
-    AddMoviePage(MovieService()),
+    GalleryPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -61,7 +60,7 @@ class _NavigationBarState extends State<NavigationBar> {
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -71,9 +70,13 @@ class _NavigationBarState extends State<NavigationBar> {
             icon: Icon(Icons.bar_chart),
             label: 'Chart',
           ),
-                    BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.movie),
             label: 'Movies',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.photo_album_rounded),
+            label: 'Gallery',
           ),
         ],
         currentIndex: _selectedIndex,
