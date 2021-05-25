@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/services.dart';
 import 'package:flutter_application/model/Movie.dart';
 import 'package:http/http.dart' as http;
 

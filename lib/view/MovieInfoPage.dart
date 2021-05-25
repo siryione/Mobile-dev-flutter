@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/cubit/moviecubit_cubit.dart';
 import 'package:flutter_application/cubitInfo/movieinfo_cubit.dart';
 import 'package:flutter_application/model/Movie.dart';
 import 'package:flutter_application/services/MovieService.dart';
@@ -40,8 +39,8 @@ class MovieInfoPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(
-                movie.poster == "" ? 'assets/Posters/no_image.jpg' : 'assets/Posters/' + movie.poster,
+              Image.network(
+                movie.poster == "" ? 'assets/Posters/no_image.jpg' : movie.poster,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
