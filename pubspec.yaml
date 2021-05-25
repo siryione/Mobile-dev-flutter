@@ -54,6 +54,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - assets/
     - assets/MoviesList.txt
     - assets/Posters/
     - assets/Posters/no_image.jpg
