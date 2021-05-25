@@ -169,7 +169,7 @@ class _MoviePageState extends State<MoviePage> {
             });
           }
 
-          Future reload(dynamic value) {
+          void reload(dynamic value) {
             id++;
             setState(() {});
           }

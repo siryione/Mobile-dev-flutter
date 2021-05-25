@@ -7,7 +7,7 @@ class AddMoviePage extends StatelessWidget {
   final TextEditingController titleEditingController = TextEditingController();
   final TextEditingController yearEditingController = TextEditingController();
   final TextEditingController typeEditingController = TextEditingController();
-  MovieService service;
+  final MovieService service;
   AddMoviePage(this.service);
   @override
   Widget build(BuildContext context) {
