@@ -1,39 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application/view/ChartPage.dart';
-import 'package:flutter_application/view/GalleryPage.dart';
 import 'package:flutter_application/view/HomePage.dart';
+import 'package:flutter_application/view/GalleryPage.dart';
+import 'package:flutter_application/view/SecondPage.dart';
 import 'package:flutter_application/view/MoviePage.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
+/// This is the main application widget.
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:NavigationBar(),
-      routes: {
-        '/afterAddMovie':(_)=> NavigationBar()
-      },
+      home: MyStatefulWidget(),
     );
   }
 }
 
-
-class NavigationBar extends StatefulWidget {
-  NavigationBar({Key key}) : super(key: key);
+/// This is the stateful widget that the main application instantiates.
+class MyStatefulWidget extends StatefulWidget {
+  MyStatefulWidget({Key key}) : super(key: key);
 
   @override
-  _NavigationBarState createState() => _NavigationBarState();
+  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
 
-class _NavigationBarState extends State<NavigationBar> {
+/// This is the private State class that goes with MyStatefulWidget.
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
-    MyHomePage(),
+    HomePage(),
     ChartPage(),
     MoviePage(),
     GalleryPage(),
@@ -54,13 +51,17 @@ class _NavigationBarState extends State<NavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: _selectedIndex == 2
+          ? null
+          // show nothing in lanscape mode
+          : AppBar(
               title: Text('Programming assignment'),
             ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(type: BottomNavigationBarType.fixed,
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

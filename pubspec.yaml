@@ -34,6 +34,7 @@ dependencies:
   # flutter_svg: ^0.17.3
   flutter_cubit: ^0.1.1
   flutter_bloc: ^6.1.2
+  sqflite: any
   flutter:
     sdk: flutter
 

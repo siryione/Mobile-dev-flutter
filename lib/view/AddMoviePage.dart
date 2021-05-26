@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application/model/Movie.dart';
-import 'package:flutter_application/services/MovieService.dart';
+import 'package:flutter_application/classes/Movie.dart';
 
-class AddMoviePage extends StatelessWidget {
+class AddMovie extends StatelessWidget {
   final TextEditingController titleEditingController = TextEditingController();
-  final TextEditingController yearEditingController = TextEditingController();
   final TextEditingController typeEditingController = TextEditingController();
-  final MovieService service;
-  AddMoviePage(this.service);
+  final TextEditingController yearEditingController = TextEditingController();
+  final MoviesRead service;
+  AddMovie(this.service);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            appBar: AppBar(
-              title: Text('Programming assignment'),
-            ),
-      body: Container(
-        padding: EdgeInsets.only(top:25, right: 25, left:25),
-        child: Column(
-        children: <Widget>[
-          TextField(
+      appBar: AppBar(title: Text("Add Movie"), backgroundColor: Colors.green),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+              child: Column(
+            children: [
+              new TextField(
                 controller: titleEditingController,
                 decoration: new InputDecoration(labelText: "Title"),
                 keyboardType: TextInputType.name,
@@ -27,7 +26,7 @@ class AddMoviePage extends StatelessWidget {
                   FilteringTextInputFormatter.singleLineFormatter
                 ],
               ),
-              TextField(
+              new TextField(
                 controller: yearEditingController,
                 decoration: new InputDecoration(labelText: "Year"),
                 keyboardType: TextInputType.number,
@@ -35,7 +34,7 @@ class AddMoviePage extends StatelessWidget {
                   FilteringTextInputFormatter.digitsOnly
                 ],
               ),
-              TextField(
+              new TextField(
                 controller: typeEditingController,
                 decoration: new InputDecoration(labelText: "Type"),
                 keyboardType: TextInputType.text,
@@ -43,26 +42,23 @@ class AddMoviePage extends StatelessWidget {
                   FilteringTextInputFormatter.singleLineFormatter
                 ],
               ),
-              OutlineButton(onPressed: (){
-                titleEditingController.text.isEmpty || yearEditingController.text.isEmpty || typeEditingController.text.isEmpty ? AlertDialog(
-          title: new Text("Alert Dialog title"),
-          content: new Text("Alert Dialog body"),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Close"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ) :   
-                this.service.addMovie(Movie(poster : '', title: titleEditingController.text, year: yearEditingController.text, type: typeEditingController.text));
-                Navigator.of(context).pop();
-              }, child: Text('Add movie'))
-        ]
+              OutlineButton(
+                  highlightedBorderColor: Colors.green,
+                  color: Colors.greenAccent,
+                  child: Text("Add Movie to List"),
+                  onPressed: () {
+                    this.service.addMovie(Movie(
+                          poster: "",
+                          title: titleEditingController.text,
+                          year: yearEditingController.text,
+                          type: typeEditingController.text,
+                        ));
+                    Navigator.of(context).pop();
+                  })
+            ],
+          )),
+        ),
       ),
-    )
     );
   }
 }
