@@ -1,12 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application/cubit/cubitphoto_cubit.dart';
-import 'package:flutter_application/model/Photo.dart';
-import 'package:flutter_application/services/PhotoService.dart';
+import 'package:flutter_application/classes/Photo.dart';
+import 'package:flutter_application/cubit/photos_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:image_picker/image_picker.dart';
 
 class GalleryPage extends StatefulWidget {
   GalleryPage({Key key}) : super(key: key);
@@ -16,41 +15,53 @@ class GalleryPage extends StatefulWidget {
 }
 
 class _GalleryPageState extends State<GalleryPage> {
-  List<Photo> photos = [];
+  final PhotosCubit photoCubit = PhotosCubit(PhotoSQLDecorator(PhotoesRead()));
   int cycle = 0;
-  final CubitphotoCubit myCubit = CubitphotoCubit(PhotoService());
+  List<String> photoes = [];
+
   List<Widget> _tiles = <Widget>[];
+
   List<StaggeredTile> _staggeredTiles = <StaggeredTile>[];
 
-   @override
+  @override
   Widget build(BuildContext context) {
-        return BlocProvider(
-      create: (context) => myCubit,
+    return BlocProvider(
+      create: (context) => photoCubit,
       child: BlocBuilder(
-        cubit: myCubit,
-        builder: (BuildContext context, state) {
-          if (state is CubitphotoInitial) {
-            myCubit.load();
-          }
-          if (state is CubitphotoLoading) {
-            return Text("Loading ...");
-          }
-          if (state is CubitphotoLoaded) {
-            photos = state.photos;
-            return buildLoaded(photos);
-          }
-          return Container();
-        },
-          ),
+          cubit: photoCubit,
+          builder: (BuildContext context, state) {
+            if (state is PhotosInitial) {
+              photoCubit.load();
+              final spinkit = SpinKitRotatingCircle(
+                color: Colors.blue,
+                size: 50.0,
+              );
+              return Center(child: spinkit);
+            }
+            if (state is PhotosLoading) {
+              final spinkit = SpinKitRotatingCircle(
+                color: Colors.blue,
+                size: 50.0,
+              );
+              return Center(child: spinkit);
+            }
+            if (state is PhotosLoaded) {
+              photoes = state.photoes;
+              print('here' + photoes.length.toString());
+              return buildLoaded(photoes);
+            }
+            return Container();
+          }),
     );
+  }
 }
 
-Widget buildLoaded(List<Photo> photos) {
+Widget buildLoaded(List<String> photoes) {
   List<StaggeredTile> _preLoadStaggeredTiles = <StaggeredTile>[];
   List<Widget> _preLoadTiles = [];
   int incycle = 0;
-  for (Photo photo in photos) {
-    _preLoadTiles.add(_URLImageTile(photo.stringURL));
+  for (String photo in photoes) {
+    _preLoadTiles.add(_URLImageTile(photo));
     incycle == 0 || incycle == 7
         ? _preLoadStaggeredTiles.add(StaggeredTile.count(2, 2))
         : _preLoadStaggeredTiles.add(StaggeredTile.count(1, 1));
@@ -69,7 +80,7 @@ Widget buildLoaded(List<Photo> photos) {
     ),
   );
 }
-}
+
 class _preLoadstaggeredTiles {}
 
 class _ImageTile extends StatelessWidget {
@@ -89,7 +100,6 @@ class _ImageTile extends StatelessWidget {
     );
   }
 }
-
 
 class _URLImageTile extends StatelessWidget {
   const _URLImageTile(this.image);

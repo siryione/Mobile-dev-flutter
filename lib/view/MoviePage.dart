@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/cubit/moviecubit_cubit.dart';
-import 'package:flutter_application/model/Movie.dart';
-import 'package:flutter_application/services/MovieService.dart';
+import 'package:flutter_application/classes/Movie.dart';
+import 'package:flutter_application/moviereadlistcubit/movieslistcubit_cubit.dart';
 import 'package:flutter_application/view/MovieInfoPage.dart';
-import 'package:flutter_application/widget/Search.dart';
+import 'package:flutter_application/view/AddMoviePage.dart';
+import 'package:flutter_application/widgets/searchwidget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'AddMoviePage.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
-
 class MoviePage extends StatefulWidget {
-  MoviePage({Key key}) : super(key: key);
-
   @override
   _MoviePageState createState() => _MoviePageState();
 }
 
 class _MoviePageState extends State<MoviePage> {
-  final MoviecubitCubit myCubit = MoviecubitCubit(MovieService());
+  final MovieslistcubitCubit myCubit =
+      MovieslistcubitCubit(MovieSQLDecorator(MoviesRead()));
   String query = "";
   List<Movie> filteredMovies;
   List<Movie> allMovies;
@@ -27,16 +23,16 @@ class _MoviePageState extends State<MoviePage> {
   var id = 0;
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   actions: <Widget>[
-      //     IconButton(
-      //         icon: Icon(Icons.add),
-      //         onPressed: () {
-      //           navigateSecondPage(MovieService());
-      //         })
-      //   ],
-      //   title: Text("Movies"),
-      // ),
+      appBar: AppBar(
+        //actions: <Widget>[
+        //  IconButton(
+        //      icon: Icon(Icons.add),
+        //      onPressed: () {
+        //        navigateSecondPage(MovieSQLDecorator(MoviesRead()));
+        //      })
+        //],
+        title: Text("Movies"),
+      ),
       body: Column(children: [
         buildSearch(),
         BlocProvider(
@@ -44,18 +40,20 @@ class _MoviePageState extends State<MoviePage> {
           child: BlocBuilder(
             cubit: myCubit,
             builder: (BuildContext context, state) {
-              if (state is MoviecubitInitial) {
+              if (state is MovieslistcubitInitial) {
                 myCubit.load(query);
               }
-              if (state is MoviecubitLoading) {
+              if (state is MovieslistcubitLoading) {
                 final spinkit = SpinKitRotatingCircle(
                   color: Colors.blue,
                   size: 50.0,
                 );
-                return Center(heightFactor: 3, child: spinkit);
+                return Center(child: spinkit);
               }
-              if (state is MoviecubitLoaded) {
+              if (state is MovieslistcubitLoaded) {
+                print('before2');
                 allMovies = state.movies;
+                print(allMovies.length);
 
                 return buildLoaded(allMovies, context);
               }
@@ -67,7 +65,7 @@ class _MoviePageState extends State<MoviePage> {
     );
   }
 
-  Widget buildLoaded(List<Movie> movies, BuildContext context) {
+  Widget buildLoaded(List<Movie> movies, BuildContext contex) {
     return Expanded(
       child: movies.length == 0 || query.length < 3
           ? Center(child: Text("No Results"))
@@ -108,7 +106,9 @@ class _MoviePageState extends State<MoviePage> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
                                 image: DecorationImage(
-                                    image: movies[index].poster == 'N/A'
+                                    image: movies[index].poster == "" ||
+                                            movies[index].poster == null ||
+                                            movies[index].poster == 'N/A'
                                         ? AssetImage(
                                             'assets/Posters/no_image.jpg')
                                         : NetworkImage(movies[index].poster)),
@@ -179,8 +179,12 @@ class _MoviePageState extends State<MoviePage> {
     });
   }
 
-  Future reload(dynamic value) {
-    id++;
+  void onGoBack(dynamic value) {
     setState(() {});
+  }
+
+  void navigateSecondPage(service) {
+    Route route = MaterialPageRoute(builder: (context) => AddMovie(service));
+    Navigator.push(context, route).then(onGoBack);
   }
 }
